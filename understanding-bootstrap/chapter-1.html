@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<title>Document</title>
+	<link rel="stylesheet" href="../public/css/bootstrap-3.1.0.css" />
+	<link rel="stylesheet" href="../public/css/bootstrap-theme-3.1.0.css" />
+	<script src="../public/js/jquery-1.12.4.js"></script>
+	<script src="../public/js/bootstrap-3.1.0.js"></script>
+	<style>
+	/* attr|=value  value必须是整个单词 */
+	[lang|=en]{
+		background:yellow;
+	}
+	/* att~=value value是属性中的一个词汇,空格用来区分词汇 "flower abc" "flowerabc"*/
+	[title~=flower]{
+		border:5px solid yellow;
+	}
+	</style>
+</head>
+<body>
+	<h2>开始bootstrap</h2>
+	<p>属性选择器</p>
+	<p lang="en">Hello!</p>
+	<p lang="en-us">Hi!</p>
+	<p lang="ena">World!</p>
+</body>
+</html>
