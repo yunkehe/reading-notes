@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>中介者模式例子</title>
+</head>
+<body>
+	<div>
+		
+	选择颜色：<select id="selectColor">
+		<option value="">请选择</option>
+		<option value="red">red</option>
+		<option value="blue">blue</option>
+	</select>
+
+	输入购买数量：<input type="text" id="numberInput" />
+	</div>
+
+	您选择了颜色：<div id="colorInfo"></div>
+	您输入了数量：<div id="numInfo"></div>
+
+	<button id="nextBtn" disabled>请选择手机颜色和购买数量</button>
+
+</body>
+<script type="text/javascript">
+	var selectColor = document.getElementById('selectColor'),
+		numberInput = document.getElementById('numberInput'),
+		nextBtn = document.getElementById('nextBtn'),
+		colorInfo = document.getElementById('colorInfo'),
+		numInfo = document.getElementById('numInfo');
+
+	var goods = {
+		red: 3,
+		blue: 5
+	};
+
+	selectColor.onchange = function() {
+		// body...
+		var color = this.value,
+			number = numberInput.value,
+			stock = goods[color];
+
+		colorInfo.innerHTML = color;
+
+		if(!color){
+			nextBtn.disabled = true;
+			nextBtn.innerHTML = '请选择手机颜色';
+			return;
+		};
+
+		// isInteger()参数是number
+		if(!Number.isInteger(+number)){
+			nextBtn.disabled = true;
+			nextBtn.innerHTML = '请输入正确的购买数量';
+			return;
+		}
+
+		numInfo.innerHTML = number;
+
+		if(number > stock){
+			nextBtn.disabled = true;
+			nextBtn.innerHTML = '库存不足';
+			return;
+		}
+
+		nextBtn.disabled = false;
+		nextBtn.innerHTML = '放入购物车';
+
+	}
+
+</script>
+</html>
