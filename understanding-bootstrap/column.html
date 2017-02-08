@@ -18,6 +18,9 @@
 		#first .row > div{
 			background: skyblue;
 		}
+		#first .row .bg-green{
+			background-color: green;
+		}
 	</style>
 </head>
 <body>
@@ -39,7 +42,7 @@
 		</div>
 
 		<div class="row">
-			<div class="col-md-8">8</div>
+			<div class="col-md-8 bg-green">8</div>
 			<div class="col-md-4">4</div>
 		</div>
 
@@ -47,6 +50,18 @@
 			<div class="col-md-4 col-md-offset-1">col-md-offset-1列偏移,margin-left
 			</div>
 			<div class="col-md-4">2</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-9 col-md-push-3 bg-green"><code>col-md-push-3</code><span>相对于当前位置向右偏移</span></div>
+			<div class="col-md-3 col-md-pull-9"><code>col-md-pull-9</code><span>相对于当前位置向左偏移</span></div>
+		</div>
+
+		<div class="row">
+			<div class="col-xs-6 col-sm-3">1</div>
+			<div class="col-xs-6 col-sm-3">2</div>
+			<div class="col-xs-6 col-sm-3">3</div>
+			<div class="col-xs-6 col-sm-3">4</div>
 		</div>
 	</div>
 </body>
