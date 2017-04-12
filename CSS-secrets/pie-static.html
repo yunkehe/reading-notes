@@ -7,7 +7,7 @@
 </head>
 <body>
 	<div class="pie-animate">pie</div>
-	<div class="pie">20%</div>
+	<div class="pie" id="count-down-pie"><div class="pie-inner"></div></div>
 	<div class="pie">60%</div>
 </body>
 <script type="text/javascript">
@@ -17,6 +17,30 @@
 		var p = parseFloat(v.textContent);
 		v.style.animationDelay = '-' + p + 's';
 	});
+
+	// time 单位等于秒
+	function countDown(id, duration){
+		var frame = 1000, // 默认1000 
+		    increment = 100/frame,
+		    second = duration/frame,
+		    start = 0;
+
+		var el_pie = document.getElementById(id);
+
+		var timeID000 = setInterval(function(){
+
+			el_pie.style.animationDelay = '-' + (start += increment) + 's';
+
+			if(start >= 100){
+				el_pie.style.animationDelay = '-100s';
+				clearInterval(timeID000);
+			}
+
+		}, second*1000)
+	}
+
+	// 倒计时进度图
+	countDown('count-down-pie', 4);
 
 </script>
 </html>
