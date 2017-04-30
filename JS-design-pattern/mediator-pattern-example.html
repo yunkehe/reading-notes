@@ -12,7 +12,13 @@
 		<option value="red">red</option>
 		<option value="blue">blue</option>
 	</select>
-
+	
+	选择内存：
+	<select name="" id="memorySelec">
+		<option>请选择</option>
+		<option value="32G">32G</option>
+		<option value="16G">16G</option>
+	</select>
 	输入购买数量：<input type="text" id="numberInput" />
 	</div>
 
@@ -20,6 +26,7 @@
 	您输入了数量：<div id="numInfo"></div>
 
 	<button id="nextBtn" disabled>请选择手机颜色和购买数量</button>
+
 
 </body>
 <script type="text/javascript">
@@ -68,5 +75,109 @@
 
 	}
 
+	numberInput.oninput = function(){
+		var color = selectColor.value,
+			number = this.value,
+			stock = goods[color];
+
+		numInfo.innerHTML = number;
+
+		if(!color){
+			nextBtn.disabled = true;
+			nextBtn.innerHTML = '请选择手机颜色';
+			return;
+		}
+
+		if(((number-0)|0) !== number - 0){
+			nextBtn.disabled = true;
+			nextBtn.innerHTML = '请输入正确的购买数量';
+			return;
+		}
+
+		if(number > stock){
+			nextBtn.disabled = true;
+			nextBtn.innerHTML = '库存不足';
+			return;
+		}
+
+		nextBtn.disabled = false;
+		nextBtn.innerHTML = '放入购物车';
+	}
+
+	// 思考：增加一个选择内存，就要修改很多代码，怎么破？
+	// 使用中介者模式
+	var goods = {
+		'red|32G': 3,
+		'red|16G': 0,
+		'blue|32G': 1,
+		'blue|16G': 5
+	};
+
+	var mediator = (function(){
+		var colorSelect = document.getElementById('colorSelect'),
+			memorySelect = document.getElementById('memorySelect'),
+			numberInput = document.getElementById('numberInput'),
+
+			colorInfo = document.getElementById('colorInfo'),
+			numberInfo = document.getElementById('numInfo'),
+			memoryInfo = document.getElmentById('memoryInfo'),
+			nextBtn = document.getElementById('nextBtn');
+
+		return {
+			changed: function(obj){
+				var color = colorSelect.value,
+					memory = memorySelect.value,
+					number = numberInput.value,
+					stock = goods[color + '|' + memory];
+
+				if(obj === colorSelect){
+					colorInfo.innerHTML = color;
+				}else if(obj === memorySelect){
+					memoryInfo.innerHTML = memory;
+				}else if(obj === numberInput){
+					numberInfo.innerHTML = number;
+				}
+
+				if(!color){
+					nextBtn.disabled = true;
+					nextBtn.innerHTML = '请选择手机颜色';
+					return;
+				}
+
+				if(!memory){
+					nextBtn.disabled = true;
+					nextBtn.innerHTML = '请选择内存大小';
+					return;
+				}
+
+				if(((number-0)|0) !== number - 0){
+					nextBtn.disabled = true;
+					nextBtn.innerHTML = '请输入正确的购买数量';
+					return;
+				}
+
+				if(number > stock){
+					nextBtn.disabled = true;
+					nextBtn.innerHTML = '库存不足';
+					return;
+				}
+
+				nextBtn.disabled = false;
+				nextBtn.innerHTML = '放入购物车';
+			}
+		}
+	})();
+
+	colorSelect.onchange = function(){
+		mediator.changed(this);
+	};
+
+	memorySelect.onchange = function(){
+		mediator.changed(this);
+	};
+
+	numberInput.oninput = function(){
+		mediator.changed(this);
+	}
 </script>
 </html>
