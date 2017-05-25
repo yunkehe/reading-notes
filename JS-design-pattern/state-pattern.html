@@ -5,7 +5,7 @@
     <title>状态模式</title>
 </head>
 <body>
-    
+    <p>缺少状态类的变通方式。</p>    
 </body>
 <script type="text/javascript">
 
@@ -64,5 +64,20 @@
 
     var light = new Light();
     light.init();
+
+    var State = function(){};
+    State.prototype.buttonWasPressed = function(){
+        throw new Error('父类的buttonWasPressed方法必须被重写！');
+    };
+
+    var SuperStrongLightState = function(light){
+        this.light = light;
+    };
+
+    SuperStrongLightState.prototype = new State();
+    SuperStrongLightState.prototype.buttonWasPressed = function(){
+        console.log('关灯！');
+        this.light.setState( this.light.offLightState );
+    }
 </script>
 </html>
