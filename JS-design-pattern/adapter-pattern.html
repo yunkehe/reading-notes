@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <h1>适配器模式</h1>
+</body>
+<script type="text/javascript">
+    var googleMap = {
+        show: function (argument) {
+            console.log('开始渲染谷歌地图');
+        }
+    }
+
+    var baiduMap = {
+        display: function(){
+            console.log('开始渲染百度地图');
+        }
+    }
+
+    var baiduMapAdapter = {
+        show: function(){
+            return baiduMap.display();
+        }
+    }
+
+    // renderMap( googleMap );
+    // renderMap( baiduMapAdapter );
+
+    var getGuangdongCity = function(){
+        var guangdongCity = [
+            {
+                name: 'shenzhen',
+                id: 11,
+            },{
+                name: 'guangzhou',
+                id: 12,
+            }
+        ]
+
+        return guangdongCity;
+    }
+
+    var render =  function( fn ){
+        console.log('开始渲染广东省地图');
+        document.write( JSON.stringify( fn() ) );
+    }
+
+    render( getGuangdongCity );
+
+    var guangdongCity = {
+        shenzhen: 11,
+        guangzhou: 12,
+        zhuhai: 13
+    }
+ 
+</script>
+</html>

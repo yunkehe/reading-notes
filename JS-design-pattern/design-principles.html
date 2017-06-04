@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <h1>设计原则和编程技巧</h1>
+    <p>并不是所有的职责都应该一一分离。</p>
+    <p>如果随着需求变化，有两个职责总是同时变化，那就不必分离他们。</p>
+    <ul>
+        <li>单一职责原则</li>
+        <li>最少知识原则（也叫迪米特法则）</li>
+        <li>
+            <h3>开发封闭原则</h3>
+            <p>给原函数增加功能，但是不允许改动程序源代码。</p>
+        </li>
+    </ul>
+    <h2>代码重构</h2>
+    <ul>
+        <li>把条件分支语句提炼成函数。</li>
+        <li>提前让函数退出 代替 嵌套条件分支语句</li>
+        <li>少用三目运算符</li>
+        <li>合理使用链式调用</li>
+        <li>分解大型类</li>
+    </ul>
+    <footer>
+        <p>tips</p>
+        <ol>
+            <li>手动编写一些接口检查的代码。</li>
+        </ol>
+    </footer>
+</body>
+<script type="text/javascript">
+var mult = (function () {
+    var cache = {};
+
+    return function(){
+        var args = Array.prototype.join.call(arguments, ',');
+        if( cache[args] ){
+            return cache[args];
+        }
+        var a = 1;
+        for(var i=0, l=arguments.length; i<l; i++){
+            a = a * arguments[i];
+        }
+
+        return cache[args] = a;
+    }
+})();
+    
+    // Function.prototype.after
+    Function.prototype.after = function(afterfn){
+        var self = this;
+        return function(){
+            var ret = self.apply(this, arguments);
+            afterfn.apply(this, arguments);
+
+            // 返回原函数运行结果
+            return ret;
+        }
+    };
+
+    window.onload = (window.onload || function(){}).after(function(){
+        console.log('excuted byafter fn');
+    })
+
+</script>
+</html>
