@@ -3,16 +3,18 @@
 <head>
 	<meta charset="UTF-8">
 	<title>饼图</title>
-	<link rel="stylesheet" href="css/shape.css">
 </head>
 <body>
 	<div class="pie-animate">pie</div>
 	<div class="pie" id="count-down-pie"><div class="pie-inner"></div></div>
 	<div class="pie">60%</div>
+	<div class="pie" id="go-to-pie"><div class="pie-inner">0%</div></div>
+
 </body>
 <script type="text/javascript">
 	var pieList = document.querySelectorAll('.pie');
-	var pieArr = Array.prototype.slice.call(pieList);		
+	var pieArr = Array.prototype.slice.call(pieList);
+
 	pieArr.forEach(function(v, i){
 		var p = parseFloat(v.textContent);
 		v.style.animationDelay = '-' + p + 's';
@@ -41,6 +43,10 @@
 
 	// 倒计时进度图
 	countDown('count-down-pie', 4);
+
+	// 滚动到指定正确率
+	function goToRate(id){
+	}
 
 </script>
 </html>
