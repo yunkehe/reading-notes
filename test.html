@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script type="text/javascript" src="http://google.github.io/traceur-compiler/bin/traceur.js"></script>
+    <!-- <script type="text/javascript" src="http://google.github.io/traceur-compiler/src/bootstrap.js"></script> -->
+    <script type="text/javascript">
+        traceur.options.experimental = true;
+    </script>
+</head>
+<body>
+    
+</body>
+<script type="text/javascript">
+    class Calc{
+        constructor(){
+            console.log('Calc controctor');
+        }
+        add(a, b){
+            return a + b;
+        }
+    }
+    var c = new Calc();
+    console.log(c.add(4, 5));
+</script>
+</html>
