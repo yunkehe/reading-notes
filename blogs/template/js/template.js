@@ -60,4 +60,5 @@ var tpl = '<ul>\
 </ul>';
 
 
-// document.body.innerHTML = template(tpl, {name: '何珂'});
+// d
+// ocument.body.innerHTML = template(tpl, {name: '何珂'});
