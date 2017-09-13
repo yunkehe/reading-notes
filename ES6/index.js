@@ -5,3 +5,4 @@ var es6Code = require('babel-core')
     .code;  
 
 console.log('es6Code: \n', es6Code);
+
