@@ -24,4 +24,80 @@ s.includes('o');
 // padEnd
 
 //  模板字符串
+var name = "Bob", time = "today";
+var s3 = `Hello ${name}, how are you ${time}?`;
+console.log(s3);
+
 // 模板编译
+var template = `
+    <ul>
+        <% for(var i=0; i<data.supplies.length; i++){ %>
+        <li><%= data.supplies[i] %></li>
+        <% } %>
+    </ul>
+`;
+
+// 思路
+// echo('<ul>');
+// for(var i=0; i < data.supplies.length; i++) {
+//   echo('<li>');
+//   echo(data.supplies[i]);
+//   echo('</li>');
+// };
+// echo('</ul>');
+
+// var evalExpre = /<%=(.+?)%>/g;
+// var expr = /<%([\s\S]+?)%>/g;
+
+// var template = template
+//     .replace(evalExpre, '`); \n echo($1); echo(`')
+//     .replace(expr, '`); \n $1 \n echo(`');
+
+// template = 'echo(`'+template+'`);';
+
+// var script = `(function parse(data){
+//         var output = ""; 
+
+//         function echo(html){
+//             output += html;
+//         };
+
+//         ${template};
+
+//         return output;
+//     })`;
+
+// return script;
+
+
+function compile(template){
+  var evalExpr = /<%=(.+?)%>/g;
+  var expr = /<%([\s\S]+?)%>/g;
+
+  template = template
+    .replace(evalExpr, '`); \n  echo( $1 ); \n  echo(`')
+    .replace(expr, '`); \n $1 \n  echo(`');
+
+  template = 'echo(`' + template + '`);';
+
+  var script =
+  `(function parse(data){
+    var output = "";
+
+    function echo(html){
+      output += html;
+    }
+
+    ${ template }
+
+    return output;
+  })`;
+
+  return script;
+}
+
+
+var parse = eval(compile(template));
+
+// console.log('parse: ', parse);
+console.log('parse result:', parse({ supplies: [ "broom", "mop", "cleaner" ] }));
