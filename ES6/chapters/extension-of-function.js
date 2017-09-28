@@ -86,3 +86,17 @@ let str = 'x\uD83D\uDE80y';
 console.log('str: ', str);
 console.log( str.split('').reverse().join('') );
 console.log( [...str].reverse().join('') );
+
+// 将类似数组的对象 转化为 真正的对象
+
+// Map和Set结构 Generator函数
+
+// name属性 
+
+// 箭头函数
+
+var sum = (n1, n2) => {return n1 + n2;}
+console.log('sum: ', sum(2, 3));
+
+var getTempItem = id => ({id: id, name: 'Temp'});
+console.log('getTempItem: ', getTempItem(2));
