@@ -98,5 +98,39 @@ console.log( [...str].reverse().join('') );
 var sum = (n1, n2) => {return n1 + n2;}
 console.log('sum: ', sum(2, 3));
 
-var getTempItem = id => ({id: id, name: 'Temp'});
+var getTempItem = id => ({id: id, name: 'Temp'}) ;
 console.log('getTempItem: ', getTempItem(2));
+
+// 简化回调函数
+[1, 2, 3].map(x => x * x);
+const headAndTail = (head, ...tail) => [head, tail];
+console.log('rest参数结合使用：', headAndTail(1, 2, 3, 4)); 
+
+// 1. 函数体内的this对象就是定义时所在的对象，而不是使用时所在的对象
+// 2. 不可以当作构造函数
+// 3. 不可以使用arguments对象
+// 4. 不可以使用yield命令
+
+function foo(){
+    setTimeout( () => {
+        console.log('id: ', this.id);
+    }, 100)
+}
+
+foo.call({id: 42})
+
+// 部署管道机制 前一个函数的输出是后一个函数的输入
+const pipeline = (...funcs) => val => funcs.reduce((a, b) => b(a), val);
+const plus1 = a => a + 1;
+const mult2 = a => a * 2;
+const addThenMult = pipeline(plus1, mult2);
+
+console.log('addThenMult: ', addThenMult(5));
+
+// 函数绑定 ::
+// foo::bar(...arguments); 
+// 等同于
+// bar.apply(foo, arguments);
+
+// 尾调用优化
+// 尾逗号
