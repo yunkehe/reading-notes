@@ -61,7 +61,7 @@ function clone(origin){
     return Object.assign({}, origin);
 }
 
-function clone2(origin){
+function clone2(origin){n
     let originProto = Object.getPrototypeOf(origin);
     return Object.assign(Object.create(originProto), origin);
 }
@@ -70,3 +70,20 @@ function clone2(origin){
 // Reflect.enumerate(); 
 // 返回所有for...in循环会遍历的属性
 Object.getOwnPropertyDescriptor([], 'length').enumerable;
+
+
+// 返回包含对象的 不可枚举属性
+// Object.getOwnPropertyNames
+// Reflect.ownKeys
+ 
+// __proto__ 属性 Object.setPrototypeOf(object, prototype);
+// Object.getPrototypeOf()
+// 参数本身不是了 __proto__ 属性 则值为null
+console.log('getPrototypeOf: ', Object.getPrototypeOf({__proto__: null}));
+
+// Rest参数
+// 浅复制
+let objx = {a: {b: 1}};
+let { ...x } = objx;
+objx.a.b = 2;
+console.log('x.a.b: ', x.a.b);
