@@ -89,3 +89,54 @@ var s1 = Symbol.for('size');
 // var arr = [1, 2]; 
 // arr[Symbol.isConcatSpreadable] = false;
 // [3, 4].concat(arr) 结果是 [3, 4, [1, 2]]
+// Symbol.species
+class MyArray extends Array {
+  // 覆盖 species 到父级的 Array 构造函数上
+  static get [Symbol.species]() { return Array; }
+}
+var a = new MyArray(1,2,3);
+var mapped = a.map(x => x * x);
+
+console.log(mapped instanceof MyArray); // false
+console.log(mapped instanceof Array);   // true
+
+// Symbol.match
+class MyMatcher{
+    [Symbol.match](string){
+        return 'hello world'.indexOf(string);
+    }
+}
+
+console.log('Symbol.match: ', 'e'.match(new MyMatcher()));
+
+// 同样的还有 Symbol.replace, Symbol.search, Symbol.split
+
+// Symbol.iterator 详见iterator
+// Symbol.toPrimitive
+// 对象被转为原始类型的值时会调用
+let obj4 = {
+    [Symbol.toPrimitive](hint){
+        switch (hint){
+            case 'number':
+                console.log('number obj4');
+                return 123;
+            case 'string':
+                console.log('string');
+                return 'str';
+            case 'default':
+                return 'default';
+            default:
+                throw new Error();
+        }
+    }
+}
+console.log('toPrimitive: ', 2*obj4);
+console.log('toPrimitive: ', 3 + obj4);
+console.log('toPrimitive: ', obj4 === 'default');
+
+// Symbol.toStringTag
+console.log('Symbol.toStringTag: ', {[Symbol.toStringTag]: 'Foo'}.toString());
+console.log('Symbol.toStringTag: ', {}.toString());
+
+// Symbol.unscopables
+console.log('with环境会被排除的属性', Object.keys(Array.prototype[Symbol.unscopables]) )
