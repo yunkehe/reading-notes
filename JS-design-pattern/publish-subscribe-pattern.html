@@ -87,17 +87,17 @@
 		console.log('xiaohong: ', price, suqare);
 	});
 
-	Publish.trigger('xiaoming', 2000, 88);
+	// Publish.trigger('xiaoming', 2000, 88);
 
 	// 先发布 后订阅
-	Publish.trigger('click', 1);
+	// Publish.trigger('click', 1);
 	Publish.listen('click', function(a){
 		console.log(a);
 	});
 
 	/* 使用命名空间 */
 	
-	var Event = (function(){
+	var PubSub = (function(){
 		var globa = this,
 			event,
 			_default = 'default';
@@ -156,8 +156,8 @@
 					return false;
 				}
 
-				return each(stack, function(){
-					return this.apply(_self, args);
+				return stack.forEach(function(v, i){
+					return v.apply(_self, args);
 				})
 			};
 
@@ -222,22 +222,26 @@
 			}
 
 			return {
-				create: _create,
+				namespace: _create,
 				one: function(key, fn, last){
-					var eve = this.create();
+					var eve = this.namespace();
 					eve.one(key, fn, last);
+					return this;
 				},
 				remove: function(key, fn){
-					var eve = this.create();
+					var eve = this.namespace();
 					eve.remove(key, fn);
+					return this;
 				},
 				listen: function(key, fn, last){
-					var eve = this.create();
+					var eve = this.namespace();
 					eve.listen(key, fn, last);
+					return this;
 				},
 				trigger: function(){
-					var eve = this.create();
+					var eve = this.namespace();
 					eve.trigger.apply(this, arguments);
+					return this;
 				}
 			}
 		};
@@ -246,12 +250,12 @@
 
 	})();
 
-	Event.create('namespace1').trigger('click', 1);
 
 	// test
-	Event.create('namespace1').listen('click', function(a){
+	PubSub.namespace('namespace1').listen('click', function(a){
 		console.log(a);
 	});
 
+	PubSub.namespace('namespace1').trigger('click', 1);
 </script>
 </html>
