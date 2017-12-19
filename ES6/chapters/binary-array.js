@@ -25,5 +25,9 @@ v1[1] = 1;
 v1[2] = 3;
 v1[3] = 7;
 
+// 转换成 16位 
+//  1 2, 7 3
+//  Math.pow(2, 8) + 2  结果 258
+//  Math.pow(2, 10) + Math.pow(2, 9) + Math.pow(2, 8) + 3 结果 1795
 console.log('v1: ', v1)
 console.log('uInt16View: ', uInt16View)
