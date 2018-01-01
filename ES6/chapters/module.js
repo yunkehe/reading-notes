@@ -29,3 +29,7 @@ export {
 // import自定义名称与export default配合使用
 // import 不需要使用大括号
 // import customName from './export-default.js';
+
+// CommanJS输入的是被输入的值的拷贝
+// ES6模块加载的是值的引用
+// ES6 循环加载
