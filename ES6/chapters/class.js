@@ -63,3 +63,60 @@ class VersionArray extends Array {
         this.splice(0, this.length, ...this.history[this.history.length-1]);
     }
 }
+
+// class的取值和存值函数
+// 存值和取值函数是设置在属性的descriptor对象上的
+class CustomHTMLElement {
+    constructor(element) {
+        this.element = element;
+    }
+
+    static method() {
+        return 'hello';
+    }
+
+    get html() {
+        return this.element.innerHTML;
+    }
+
+    set html(value) {
+        this.element.innerHTML = value;
+    }
+}
+
+var descriptor = Object.getOwnPropertyDescriptor(CustomHTMLElement.prototype, 'html');
+console.log('get: ', 'get' in descriptor);
+console.log('set: ', 'set' in descriptor);
+
+// Generator方法
+
+// class的静态方法 
+// 父类的静态方法可以被子类继承
+// 静态方法也可以从super上调用
+
+CustomHTMLElement.static_prop = 1;
+
+// new.target属性
+function Person(name) {
+    if(new.target !== undefined){
+        this.name = name;
+    }else{
+        throw new Error('必须使用new生成实例');
+    }
+}
+
+var person = new Person('张三');
+var person = Person.call(person, '张三');
+
+// Mixin模式
+function copyProperties(target, source) {
+    for(let key of Reflect.ownKeys(source)) {
+        if(key !== 'constructor'
+            && key !== 'prototype'
+            && key !== 'name'
+            ) {
+            let desc = Object.getOwnPropertyDescriptor(source, key);
+            Object.defineProperty(target, key, desc);
+        }
+    }
+}
