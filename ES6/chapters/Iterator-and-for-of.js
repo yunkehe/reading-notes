@@ -110,3 +110,12 @@ for(var [name, value] of es6){
 }
 
 // 对于字符串来说，for...of循环还有一个特点，就是会正确识别32位UTF-16字符
+// jQuery.prototype[Symbol.iterator] = Array.prototype[Symbol.iterator];
+let arr3 = [1, 2, 3, 4, 5];
+for(let x of arr3){
+    if(x > 3){
+        break;
+    }
+    console.log('x: ', x);
+}
+
