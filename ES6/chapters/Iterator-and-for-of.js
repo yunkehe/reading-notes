@@ -119,3 +119,30 @@ for(let x of arr3){
     console.log('x: ', x);
 }
 
+// 如果在Generator函数内部调用另一个Generator函数，默认情况下是没有效果的
+function* foo() {
+    yield 'a';
+    yield 'b';
+}
+
+function* bar() {
+    yield 'x';
+    yield 'y';
+}
+
+for(let v of bar()){
+    console.log('v: ', v);
+}
+
+function* bar2(){
+    yield 'x';
+    yield* foo();
+    yield 'y';
+}
+
+for( let v of bar2()){
+    console.log('v2: ', v);
+}
+
+// yield 语句等同于在Generator函数内部部署一个for...of循环
+// 任何数据结构只要有Iterator接口，就可以用yield*遍历
