@@ -88,3 +88,38 @@ var g = gen();
 console.log('gen: ', g.next());
 console.log('gen: ', g.return('foo'));
 console.log('gen: ', g.next());
+
+// generator函数的 this 
+function* F() {
+	yield this.x = 2;
+	yield this.y = 3;
+}
+// new F error
+// console.log('new F: ', 'next' in (new F()) );
+
+var obj = {};
+var f = F.bind(obj)();
+
+console.log('f.next(): ', obj);
+console.log('f.next(): ', f.next());
+console.log('f.next(): ', obj);
+console.log('f.next(): ', f.next());
+console.log('f.next(): ', f.next());
+console.log('f.next(): ', obj);
+
+// ES7 Generator函数推导
+let bigArray = new Array(10000);
+for(let i = 0; i < 10000; i++) {
+	bigArray[i] = i;
+}
+let first = bigArray.map(n => n * n)[0];
+console.log(first);
+
+let bigGenerator = function* (){
+	for(let i = 0; i < 10000; i++) {
+		yield i;
+	}
+}
+
+let squared = ( for (n of bigGenerator()) n * n );	
+console.log(squared.next());
