@@ -1,6 +1,12 @@
 // 断言测试
 function assert(condition, message) {
-	
+	if(condition){
+		console.info(message);
+		return true;
+	}else{
+		console.error('assert false')
+		return false;
+	}
 }
 
 // 收集性能信息
@@ -15,4 +21,4 @@ assert(true, 'Measured time: ' + elapsed);
 // jsbin.com
 
 // 测试框架
-// 
+// 简单的异步测试套件
