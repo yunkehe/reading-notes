@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>可变长度的参数列表</title>
+</head>
+<body>
+	<h4></h4>
+</body>
+<script>
+	/* */
+	// 可以不用将Math对象作为上下文 只是为了代码整洁
+	Math.min.apply(Math, [4, 7, 9]);
+
+	/* 函数重载 */
+	function  merge(root) {
+		for(var i = 1; i < arguments.length; i++) {
+			for(var key in arguments[i]) {
+				root[key] = arguments[i][key];
+			}
+		}
+
+		return root;
+	}
+</script>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>挥舞函数</title>
+</head>
+<body>
+	<h4>挥舞函数</h4>
+	<ol>
+		<li>匿名函数</li>
+		<li>
+			<h5>递归</h5>
+			<ul>
+				<li>回文</li>
+			</ul>
+		</li>
+		<li>为什么要将全局函数作为window的方法进行创建？</li>
+		<li>将函数视为对象</li>
+		<li>什么是函数重载？</li>
+	</ol>
+	<div>
+		<input type="text" id="first" />
+		<input type="text" id="second" />
+	</div>
+</body>
+<script>
+	// 回文
+	function isPalindrome(text) {
+		if(text.length <= 1) return true;
+		if(text.chartAt(0) != text.chartAt(text.length - 1)) return false;
+		return isPalindrome(text.substr(1, text.length - 2));
+	}
+
+	function chirp(n) {
+		return n > 1 ? chirp(n - 1) + '-chirp' : 'chirp';
+	}
+
+	console.log('chrip(3) ', chirp(3));
+
+	var ninja = {
+		chirp: function signal(n) {
+			return n > 1 ? signal(n - 1) + '-chirp' : 'chirp';
+		}
+	};
+
+	var samurai = {
+		chirp:  ninja.chirp
+	};
+
+	ninja = {};
+
+	console.log('samurai.chrip(3) ', samurai.chirp(3));
+	
+	var test = function testFun() {
+		console.log('testFun == test', test === testFun);
+	}
+
+	test();
+	console.log('testFun ', typeof testFun);
+
+	var store = {
+		nextId: 1,
+		cache: {},
+		add: function(fn) {
+			if(!fn.id){
+				fn.id = store.nextId++;
+				return !!(store.cache[fn.id] = fn);
+			}
+		}
+	}
+	/* 缓存记忆昂贵的计算结果 */
+	// 计算一个值是否是素数
+	function isPrime(value) {
+		if(!isPrime.answers) isPrime.answers = {};
+
+		if(isPrime.answers[value] != null) {
+			return isPrime.answers[value];
+		}
+
+		var prime = value != 1; 
+		
+		for(var i = 2; i < value; i++) {
+			if(value % i == 0){
+				prime = false;
+				break;
+			}
+		}
+
+		return isPrime.answers[value] = prime;
+	}
+
+	/* 块注释 ⌘⌥/ */
+	/* 伪造数组的方法 */
+	var elems = {
+		length: 0,
+
+		add: function(elem) {
+			Array.prototype.push.call(this, elem);		
+		},
+
+		gather: function(id) {
+			this.add(document.getElementById(id));
+		}
+	}
+
+</script>
+</html>
