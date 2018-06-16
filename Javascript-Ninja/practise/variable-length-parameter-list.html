@@ -22,5 +22,32 @@
 
 		return root;
 	}
+
+	function multiMax(multi) {
+		return multi * Math.max.apply(Math, Array.prototype.slice.call(arguments, 1));
+	}
+
+	// 函数的length属性
+	function makeNinja(name) {console.log('1');};
+	function makeNinja2(name, rank) {console.log('2');};
+	function makeNinja3(name, rank, other) {console.log('3');};
+
+	function addMethod(object, name, fn) {
+		var old = object[name];
+
+		object[name] = function() {
+			if(fn.length == arguments.length) {
+				return fn.apply(this, arguments);
+			}else if(typeof old === 'function') {
+				return old.apply(this.arguments);
+			}
+		}
+	}
+
+	var ninjas = {};
+	addMethod(ninjas, 'whatever', function(){ alert(1); });
+	addMethod(ninjas, 'whatever', function(a){ alert(2); });
+	addMethod(ninjas, 'whatever', function(a, b){ alert(3);});
+
 </script>
 </html>
