@@ -3,8 +3,76 @@
 <head>
 	<meta charset="UTF-8">
 	<title>闭包</title>
+	<script src="../index.js"></script>
 </head>
 <body>
-	
+	<h4>closure是一个函数在创建时允许访问并操作自身之外的变量时所创建的作用域。</h4>
 </body>
+<script>
+	// 将页面脚本开发水平提高到世界级水平
+	// 私有变量
+	function Ninja() {
+		var feints = 0;
+
+		this.getFeints = function() {
+			return feints;
+		}
+
+		this.feint = function() {
+			feints++;
+		}
+	}
+
+	var ninja = new Ninja();
+	ninja.feint();
+	console.log('niaja.getFeints', ninja.getFeints());
+
+	// 绑定函数上下文
+	Function.prototype.bind = function () {
+		var fn = this, args = Array.prototype.slice.call(arguments),
+			object = args.shift();
+
+		return function () {
+			return fn.apply(object, 
+				args.concat(Array.prototype.slice.call(arguments)));
+		}
+	}
+
+	var myObject = {};
+
+	function myFunction() {
+		return this === myObject;
+	}
+
+	assert(!myFunction(), "context is not set yet");
+	var aFunction = myFunction.bind(myObject);
+	assert(aFunction(), "context is set properly");
+</script>
+<script>
+	Function.prototype.partial = function () {
+		var fn = this, args = Array.prototype.slice.call(arguments);
+
+		return function () {
+			var arg = 0;
+			for(var i = 0; i < args.length && arg < arguments.length; i++) {
+				if(args[i] === undefined) {
+					args[i] = arguments[arg++];
+				}
+			}
+			return fn.apply(this, args);
+		}
+	}
+	// 偏应用函数
+	String.prototype.csv = String.prototype.split.partial(/,\s*/);
+	var results = ('Mugan, Jin, Fuu').csv();
+	assert(results[0] == 'Mugan' &&
+			results[1] == 'Jin' &&
+			results[2] == 'Fuu', 'The text values were split properly');
+
+	var delay = setTimeout.partial(undefined, 1000);
+
+	delay(function () {
+		assert(true, 'A call to this function will be delayed 1000ms');
+	});
+</script>
 </html>

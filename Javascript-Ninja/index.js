@@ -9,14 +9,18 @@ function assert(condition, message) {
 	}
 }
 
-// 收集性能信息
-star = new Date().getTime();
-for(var n = 0; n < maxCount; n++) {
+function test() {
+	let maxCount = 200;
+	// 收集性能信息
+	let star = new Date().getTime();
+	for(var n = 0; n < maxCount; n++) {
 
+	}
+	let elapsed = new Date().getTime();
+	assert(true, 'Measured time: ' + elapsed);
 }
-elapsed = new Date().getTime();
-assert(true, 'Measured time: ' + elapsed);
 
+test();
 // 一个精简的用于jQuery的DOM测试用例
 // jsbin.com
 
