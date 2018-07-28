@@ -75,4 +75,63 @@
 		assert(true, 'A call to this function will be delayed 1000ms');
 	});
 </script>
+<script>
+	Function.prototype.memoized = function (key) {
+		this._values = this._values || {};
+		return this._values[key] !== undefined ?
+			this._values[key] :
+			this._values[key] = this.apply(this, arguments);
+	}
+
+	Function.prototype.memoize = function () {
+		var fn = this;
+		return function () {
+			return Function.prototype.memoized.apply(fn, arguments);
+		}
+	}
+
+	var isPrime = (function (num) {
+		var prime = num != 1;
+		for(var i = 2; i < num; i++){
+			if(num % i == 0){
+				prime = false;
+				break;
+			}
+		}
+		return prime;
+	});
+
+	var isPrime2 = isPrime.memoize();
+
+	// console.log('isPrime', isPrime(17));
+	// console.log('isPrime2', isPrime2(17));
+
+	assert(isPrime(17), '17 is prime');
+</script>
+<script>
+	// 使用新功能包装旧函数
+	function wrap(object, method, wrapper) {
+		var fn = object[method];
+
+		return object[method] = function() {
+			return wrapper.apply(this, [fn.bind(this)].concat(
+				Array.prototype.slice.call(arguments)));
+		}
+	}
+	// 匿名包装函数可以访问原始函数 以及通过闭包传递过来的包装器函数
+	if(navigator.userAgent.indexOf('opera') > -1){
+		wrap(Element.prototype, 'getArribute', function(original, elem, attr) {
+			return attr == 'title' ?
+			elem.title :
+			original(elem, attr)
+		});
+	}
+	// 极客函数
+	document.addEventListener('click', (function() {
+		var numClicks = 0;
+		return function () {
+			alert(++numClicks);
+		}
+	})(), false);
+</script>
 </html>
