@@ -4,11 +4,11 @@
 // 第三个参数, map方法中的this指向
 
 function foo() {
-    var args = [...arguments];
+	var args = [...arguments];
 
-    console.log('arguments: ', arguments);
-    console.log('args: ', args);
-    console.log('Array.from: ', Array.from(arguments, x => x*x) );
+	console.log('arguments: ', arguments);
+	console.log('args: ', args);
+	console.log('Array.from: ', Array.from(arguments, x => x*x) );
 }
 
 foo(2, 3, 4);
@@ -45,4 +45,22 @@ console.log(entries.next().value);
 // 数组的空位 各个方法处理方式不太一样
 
 // 数组推导 
+
+function caculate(times) {
+	let i = 0;
+	while (i < times) i++;
+}
+
+function log(fn) {
+	return function(...args) {
+		const start = Date.now();
+		fn(...args);
+		const used = Date.now() - start;
+		console.log(`call ${fn.name} {${args}} used ${used}ms`);
+	}
+}
+
+caculate = log(caculate);
+caculate(1000);
+caculate(100000);
 
