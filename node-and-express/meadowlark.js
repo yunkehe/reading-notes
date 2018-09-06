@@ -3,6 +3,7 @@ let app = express();
 
 app.set('port', process.env.PORT || 3000);
 
+app.use(express.static(__dirname + '/public'));
 // 定制404页面
 app.use()
 
@@ -20,3 +21,5 @@ app.get('/about', (req, res) => {
 });
 
 // 给关于页面添加子页面
+
+// 
