@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>第二部分-第二章</title>
+</head>
+<body>
+  <p>将一个对象或数组作为常量赋值，意味着这个值在这个常量的词法作用域结束之前不会被垃圾回收。</p>
+<script>
+  var funcs = [];
+  // var i;
+  // var i;
+  for (let i = 0; i < 5; i++) {
+    funcs.push(function () {
+      console.log(i);
+    })
+  }
+
+  funcs[3]();
+</script>
+</body>
+</html>
