@@ -8,6 +8,13 @@
 </head>
 <body>
   <p>将一个对象或数组作为常量赋值，意味着这个值在这个常量的词法作用域结束之前不会被垃圾回收。</p>
+  <p>spread/rest</p>
+  <p><code>Function.prototype </code>没有操作的空函数</p>
+  <h1>解构赋值</h1>
+  <p>解构赋值的反转</p>
+  <p>把一个对象映射/变换为数组</p>
+  <p>不用临时变量 “交换两个变量”</p>
+  <p>解构赋值表达式</p>
 <script>
   var funcs = [];
   // var i;
@@ -19,6 +26,41 @@
   }
 
   funcs[3]();
+
+  function foo(x, y, ...z) {
+    console.log(x, y, z);
+  }
+
+  foo(1, 2, 3, 4, 5);
+
+  function foo2(x = 11, y = 31) {
+    console.log( x + y);
+  }
+
+  foo2(5, undefined);
+  foo2(5, null);
+
+  {
+    var w = 1, z = 2;
+    function foo3(x = w + 1, y = x+1, z = z + 1) {
+      console.log(x, y, z);
+    }
+    // foo3(); // ReferenceError
+  }
+
+  let obj = { name: 'heke', age: 28 };
+  let {name, age} = obj;
+  let {name: newName, age: newAge} = obj;
+  // name: name 省略了 name:
+  let obj2 = {};
+  ({name: obj2.name} = obj);
+
+  var o = {a: 1, b: 2, c: 3},
+    a, b, c, p;
+  p = {a, b, c} = o;
+  console.log(a, b, c, p === o);
+  // 把解构赋值表达式组成链
+  // ({a} = {b, c} = o);
 </script>
 </body>
 </html>
