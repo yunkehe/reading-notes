@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>对象字面量扩展</title>
+</head>
+<body>
+  <ul>
+    <li>简洁方法，最好在不需要它们执行递归或事件绑定的时候使用，否则，还是用老式的
+      <code>something: function something(){ }</code>
+    </li>
+    <li>计算属性名
+      <code>Symbol.toStringTag</code>
+    </li>
+  </ul>
+</body>
+<script>
+  var controller = {
+    makeRequest: function () {
+      // 常见的写法
+      controller.makeRequest();
+      this.makeRequest();
+    }
+  }
+
+  {
+    let prefix = 'user_';
+    let o = {
+      bar: function () {
+        
+      },
+      [prefix + 'foo']: function () {
+        
+      },
+      [prefix + 'baz']: function () {
+        
+      },
+      [Symbol.toStringTag]: 'really cool thing'
+    }
+
+    console.log('o: ', o);
+  }
+
+  {
+    let o1 = {
+      foo() {
+        console.log('o1 foo');
+      }
+    };
+
+    let o2 = {
+      foo() {
+        super.foo();
+        console.log('o2 foo');
+      }
+    };
+
+    Object.setPrototypeOf(o2, o1);
+    o2.foo();
+  }
+
+</script>
+</html>
