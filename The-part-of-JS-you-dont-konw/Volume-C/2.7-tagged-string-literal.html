@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>标签字符串字面量</title>
+</head>
+<body>
+  
+</body>
+<script>
+  function foo(strings, ...values) {
+    console.log( strings );
+    console.log( values );
+  }
+
+  function bar() {
+    return foo;
+  }
+
+  var desc = 'awesome',
+    desc2 = 'hello';
+  // what's this
+  foo`Everything is ${desc}! ${desc2} world`;
+  bar()`Everything is ${desc}!`;
+
+  // 应用示例：把字符串格式化美元
+  function dollabillsyall(strings, ...values) {
+    return strings.reduce( function (s, v, idx) {
+      if(idx > 0){
+        if(typeof values[idx-1] == 'number'){
+          s += `$${values[idx-1].toFixed(2)}`;
+        }else{
+          s += values[idx-1]
+        }
+      }
+
+      return s + v;
+    })
+  }
+
+  var amt1 = 11.99,
+    amt2 = amt1*1.08,
+    name = 'kyle';
+
+  var text = dollabillsyall`Thanks for your purchase, ${name}! Your
+  product cost was ${amt1}, which with tax comes out to ${amt2}`;
+
+  console.log(text);
+
+  // String.raw
+  console.log(`hello \n world`);
+  console.log(String.raw`hello \n world`);
+
+</script>
+</html>

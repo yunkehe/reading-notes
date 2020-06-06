@@ -1,0 +1,52 @@
+<!--
+ * @Author: your name
+ * @Date: 2020-06-02 10:13:59
+ * @LastEditTime: 2020-06-02 10:27:14
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \reading-notes\my-js-function\onclick-async.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>绑定异步事件</title>
+</head>
+
+<body>
+  <h2>JS绑定事件是一个异步方法</h2>
+  <button id="test">绑定正常方法</button>
+  <button id="test2">绑定异步方法</button>
+</body>
+<script>
+  let testBtn = document.getElementById('test'),
+    testBtn2 = document.getElementById('test2');
+
+  function clickNormal() {
+    console.log('clickHandler');
+  }
+
+  async function clickAsync() {
+    console.log('clickAsync');
+    await getPromise().then((params) => {
+      console.log('promise执行', params);
+    });
+
+    console.log('setTimeout执行完毕');
+  }
+
+  function getPromise() {
+    return new Promise((resolved, rejected) => {
+      setTimeout(() => {
+        resolved(1);
+      }, 1000);
+    });
+  }
+
+  testBtn.addEventListener('click', clickNormal);
+  testBtn2.addEventListener('click', clickAsync);
+</script>
+
+</html>
