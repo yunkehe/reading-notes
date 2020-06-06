@@ -133,5 +133,11 @@
 			alert(++numClicks);
 		}
 	})(), false);
+
+	// 使用简洁名称让代码保持可读性
+	(function(v){
+		// v 在外部是一个很长的名字
+		// 对没有延迟调用的循环遍历来说尤其有用
+	})(Element.ATTRIBUTE_NODE)
 </script>
 </html>
