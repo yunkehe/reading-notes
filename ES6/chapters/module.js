@@ -10,8 +10,8 @@
 // export var name = 'Heke';
 // export var year = '1990';
 
-function v1() {};
-function v2() {};
+function v1() { };
+function v2() { };
 
 // 可以使用as重命名
 export {
@@ -33,3 +33,5 @@ export {
 // CommanJS输入的是被输入的值的拷贝
 // ES6模块加载的是值的引用
 // ES6 循环加载
+
+export var a = 1;
