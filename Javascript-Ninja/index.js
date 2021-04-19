@@ -4,7 +4,7 @@ function assert(condition, message) {
 		console.info(message);
 		return true;
 	}else{
-		console.error('assert false')
+		console.error(message)
 		return false;
 	}
 }

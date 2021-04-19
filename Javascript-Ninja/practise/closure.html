@@ -12,6 +12,27 @@
     <h4>偏应用函数</h4>
     <h4>函数包装</h4>
   </body>
+	<script>
+		Number.prototype.add = (value) => {
+			console.log('this', this);
+			return this + value;
+		}
+	</script>
+	<script>
+		function Nijinn() {
+			this.swung = true;
+			this.swingWord = function () {
+				return !this.swung;
+			}
+		}
+
+		var nijinn = new Nijinn();
+		Nijinn.prototype.swingWord = function () {
+			return this.swung;
+		}
+
+		assert(nijinn.swingWord(), 'called the instance method, not the prototype method.');
+	</script>
   <script>
     var later;
     function outerFunction() {
@@ -178,10 +199,10 @@
       });
     }
 
-    if (Prototype.Browser.Opera) {
-      wrap(Element.Methods, "readAttribute", function (original, elem, attr) {
-        return attr == "title" ? elem.title : original(elem, attr);
-      });
-    }
+    // if (Prototype.Browser.Opera) {
+    //   wrap(Element.Methods, "readAttribute", function (original, elem, attr) {
+    //     return attr == "title" ? elem.title : original(elem, attr);
+    //   });
+    // }
   </script>
 </html>
