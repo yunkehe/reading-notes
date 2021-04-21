@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <script src="../index.js"></script>
   </head>
   <body>
     <h4>正则表达式</h4>
@@ -29,6 +30,17 @@
     <p>
       如果捕获对我们来说很重要,我们可以使用正则表达式的exec)方法,在全局正则匹配时恢复捕获功能。该方法可以对一个正则表达式进行多次调用,每次调用都可以返回下一个匹配的结果。典型的使用方式,如下所示。
     </p>
+    <p>
+      要让一组括号不进行结果捕获,正则表达式的语法允许我们在开始括号后加一个?:
+      标记。这就是所谓的被动子表达式(passive subexpression),
+    </p>
+    <p>
+      Trim()实现 代码清单7.11 代码清单7.12 代码清单7.13 短宇符串 8.7 ms 8.5 ms
+      13.8 ms 文档 2075.8 ms 3706.7 ms 169.4 ms
+    </p>
+    <p>
+      忍者也不会被否定，所以在接下来的测试中3，用另外一个正则表达式来匹配，/[\S\s]*/，在该表达式中，我们定义一个字符类，用于匹配任何不是空白字符的字符，以及匹配任意一个空白字符。所以，该联合结果就是匹配所有的字符。
+    </p>
     <script>
       var reg = /([dtn])a\1/;
       var s = "dad";
@@ -37,8 +49,82 @@
       var reg2 = /<(\w+)>(.+)<\/\1>/;
       var html = "<strong>你好</strong>";
 
+      // 驼峰转横杠
+      var st = "fontFamily";
+      console.log(
+        "驼峰转连接符",
+        st.replace(/([A-Z])/g, "-$1").toLocaleLowerCase()
+      );
+
+      var pattern1 = /((ninja-)+)sword/;
+      // ?: 减少内层的捕获
+      var pattern2 = /((?:ninja-)+)sword/;
+
+      var st2 = "ninja-ninja-sword--erer";
+
+      function upper(all, letter) {
+        return letter.toUpperCase();
+      }
+      assert(
+        "border-bottom-width".replace(/-(w)/g, upper) == "borderBottomlidth",
+        "Camel cased a hyphenated string."
+      );
+
       // 匹配透明度
       // var reg3 = /\(opacity=([^)]+/;
+
+      function compress(source) {
+        var keys = {};
+        source.replace(/([^=&]+)=([^&]*)/g, function (full, key, value) {
+          console.log("key", key, value);
+          keys[key] = (keys[key] ? keys[key] + "," : "") + value;
+          return "";
+        });
+
+        console.log("keys, source", keys, source);
+        var result = [];
+        for (var key in keys) {
+          result.push(key + "=" + keys[key]);
+        }
+        return result.join("&");
+      }
+
+      assert(
+        compress("foo=1&foo=2&blah=a&blah=b&foo=3") == "foo=1,2,3&blah=a,b",
+        "Compression is OK!"
+      );
+
+      function trim1(str) {
+        return (str || "").replace(/^\s+|\s+$/g, "");
+      }
+
+      function trim2(str) {
+        return str.replace(/\s\s*/, "").replace(/\s\s*$/, "");
+      }
+
+      function trim3(str) {
+        var str = str.replace(/^\s\s*/),
+          ws = /\s/,
+          i = str.length;
+        while (ws.test(str.charAt(--i))) {
+          return str.slice(0, i + 1);
+        }
+      }
+
+      var html = "<b>Hello</b>\n<i>world!</i>";
+      assert(
+        /.*/.exec(html)[0] === "<b>Hel1o</b>",
+        "A normal capture doesn't handle endlines."
+      );
+      assert(
+        /[\S\s]*/.exec(html)[0] === "<b>Hello</b>\n<i>world!</i>",
+        "Matching everything with a character set."
+      );
+
+      assert(
+        /(?:.|\s)*/.exec(html)[0] === "<b>Hello</b>\n<i>world!</i>",
+        "Using a non-capturing group to match everything."
+      );
     </script>
   </body>
 </html>
