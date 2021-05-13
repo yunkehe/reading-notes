@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>with语句</title>
+  </head>
+  <body>
+    <p>
+      图10.2清楚地展示了，由于第二个测试通过，对with作用域内不存在的属性进行赋值操作，将会导致在全局上下文内进行赋值操作。
+    </p>
+    <p>测试贪婪ID</p>
+    <p>
+      这里发生的事情是,浏览器将表单里引用的每个 input元素都作为 form
+      元素的属性了。刚开始似乎很方便,但看到所添加属性的名称是
+      input属性的id值时就发现问题了。如果id值恰好是form元素已经存在的属性,这些原始属性就会被新属性取而代之,如
+      action或 submit
+    </p>
+    <form id="form" action="/conceal">
+      <input type="text" id="action" /> <input type="submit" id="submit" />
+    </form>
+    <script>
+      var what = document.getElementById("form").action;
+      var form = document.getElementById("form");
+      console.log("what is what:", what);
+      console.log("浏览器将", what);
+    </script>
+  </body>
+</html>

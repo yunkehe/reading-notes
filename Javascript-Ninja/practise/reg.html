@@ -125,6 +125,22 @@
         /(?:.|\s)*/.exec(html)[0] === "<b>Hello</b>\n<i>world!</i>",
         "Using a non-capturing group to match everything."
       );
+
+      var pattern = /((\+)(\\.))+$/;
+
+      var tests = [
+        "formUpdate",
+
+        "form\\. updatell. whatever",
+        "form\\: update",
+
+        "If\ lo\r\ \m\\u\\p\ld\ la\lt\le",
+        "form: update",
+      ];
+
+      for (var n = 0; n < testslength; n++) {
+        assert(pattern.test(tests[n]), tests[n] + " is a valid identifier");
+      }
     </script>
   </body>
 </html>
