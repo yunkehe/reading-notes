@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>DOM操作</title>
+</head>
+<body>
+	<p>DOM操作，性能优化</p>
+	<p>把HTML转换成DOM</p>
+
+	<div>
+		<table>
+			<tbody>
+				<tr id="test">
+					<td>der</td>
+					<td>der</td>
+					<td>der</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<p>层级是3 node = table, 2， node = tbody, 1, node = tr,
+		return tr.childNodes;
+	</p>
+
+	<script>
+		var testNode = document.getElementById('test');
+		function isEventSupported(eventName){
+			var element = document.createElement('div'),
+			isSupported;
+
+			eventName = 'on' + eventName;
+			isSupported = (eventName in element);
+
+			if (!isSupported){
+				element.setAttribute(eventName, 'return;');
+				isSupported = typeof element[eventName] == 'function';
+			}
+			element = null;
+			return isSupported;
+		}
+
+		// 转换 自闭合标签为 <table/> 为 <table></table>
+		function convert(html) {
+			return html.replace(/(<(\w+)[^>]*?)\/>/g, function(all, front, tag ){
+				console.log('replace 参数', arguments);
+				return front + '></' + tag + '>';
+			});
+		}
+
+		// * 表示0个或多个  匹配 最短的 的0个或多个 不是 > 的字符
+		// 重复任意次，但尽可能少重复
+		//
+	</script>
+</body>
+</html>

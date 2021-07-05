@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>解构赋值</title>
+  </head>
+  <body>
+    <p>
+      所以对于简洁方法能得出什么结论呢？它们简洁方便。但是应该只在不需要它们执行
+      <strong> 递归或者事件绑定 / 解绑定 </strong>
+      的时候使用。否则的话，就按照老式的 something: function something(..)
+      方法来定义吧。
+    </p>
+    <p>=> 是关于 this、 arguments 和 super 的词法绑定</p>
+    <p>不管是少打字还是多 打字，你应该精确了解自己输入的每个字符的目的所在。</p>
+
+    <script>
+               var o = {
+               	x() {
+               		// ..
+               	},
+               	y() {
+               		// ..
+               	},
+               };
+
+      // 简洁
+         var obj = {
+         ["f" + "oo"]() {
+         console.log('foo');
+         } // 计算出的简洁方法
+         *["b" + "ar"]() {
+         console.log('foo');
+         } // 计算出的简洁生成器
+         };
+    </script>
+    <script>
+      function bar() {
+        return function foo(strings, ...values) {
+          console.log(strings);
+          console.log(values);
+        };
+      }
+      var desc = "awesome";
+      bar()`Everything is ${desc}!`;
+
+      var controller = {
+        makeRequest: () => {
+          console.log("controller.makeRequest() this 指向window", this);
+          this.helper();
+        },
+        helper: () => {
+          //
+          console.log("controller.helper()");
+        },
+      };
+      // controller.makeRequest();
+
+      var o = {};
+      for (o.a of [1, 2, 3]) {
+        console.log(o.a);
+      }
+      // 1 2 3
+      // for ({ x: o.a } of [{ x: 1 }, { x: 2 }, { x: 3 }]) {
+      //   console.log(o.a);
+      // }
+      // 1 2 3
+    </script>
+  </body>
+</html>

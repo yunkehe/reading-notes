@@ -1,15 +1,222 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>深入你不知道的Javascript系列</title>
-</head>
-<body>
-  <h3>this和对象原型</h3>
-  <p>原型机制与类的行为特性是完全相反的。</p>
-  <p>委托是完全不同的设计模式，也更加强大，它取代了需要类和继承的设计。</p>
-  <p>个人偏见、框架假定和项目的截止日期都不应该成为你从不学习和深入理解Javascript的借口。</p>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>深入你不知道的Javascript系列</title>
+  </head>
+  <body>
+    <h3>this和对象原型</h3>
+    <p><code>this</code>是根据相关函数的执行方式而动态绑定的。</p>
+    <p>原型机制与类的行为特性是完全相反的。</p>
+    <p>委托是完全不同的设计模式，也更加强大，它取代了需要类和继承的设计。</p>
+    <p>
+      个人偏见、框架假定和项目的截止日期都不应该成为你从不学习和深入理解Javascript的借口。
+    </p>
+
+    <br />
+
+    <p>
+      <b
+        >不幸的是，将类和继承的设计模式思维带入 JavaScript
+        的想法是你所做的最坏的事情，因
+        为语法可能会让你迷惑不已，让你以为真的有类这样的东西存在，实际上原型机制与类的
+        行为特性是完全相反的。</b
+      >
+      学习什么是真正的类？
+    </p>
+    <p>
+      <code>临时死亡区</code>
+    </p>
+    <p>
+      常量 a
+      并不持有一个常量数组；相反地，它持有一个指向数组的常量引用。数组本身是可以随意改变的。
+    </p>
+    <p>
+      我的建议是：要避免可能令人迷惑的代码，只对你有意表明不会改变的变量使用
+      const。 换句话说，不要依赖于 const
+      来规范代码行为，而是在意图清晰的时候，把它作为一个表 明意图的工具。
+    </p>
+    <p>
+      在函数声明中的 x = 11 更像是 x !== undefined ? x : 11 而不是常见技巧 x ||
+      11，所以 在把前 ES6 代码转换为 ES6 默认参数值语法的时候要格外小心
+    </p>
+    <p>
+      特别对于对象解构形式来说，如果省略了 var/let/const 声明符，就必须把
+      整个赋值表达式用 ( ) 括起来。因为如果不这样做，语句左侧的 {..} 作为语
+      句中的第一个元素就会被当作是一个块语句而不是一个对象。
+    </p>
+    <p>
+      但是为什么 y 值为 undefined ？作为函数参数默认值的 { y: 10 }
+      值是一个对象，而不是 解构默认值。因此，它只在第二参数没有传入，或者传入
+      undefined 的时候才会生效。
+    </p>
+    <script>
+      // console.log("TDZ", b);
+      // let b;
+
+      var funcs = [];
+      for (let i = 0; i < 5; i++) {
+        funcs.push(function () {
+          console.log(i);
+        });
+      }
+      funcs[3](); // 3
+      // for 循环头部的 let i 不只为 for 循环本身声明了一个 i，而是为循环的每一次迭代都重新
+      // 声明了一个新的 i。这意味着 loop 迭代内部创建的闭包封闭的是每次迭代中的变量，就像
+      // 期望的那样
+
+      let something = true;
+      if (something) {
+        // 反向搜集
+        function foo(x, y, ...z) {
+          console.log(x, y, z);
+        }
+        foo(1, 2, 3, 4, 5);
+      } else {
+        function foo() {
+          console.log("2");
+        }
+      }
+      // foo();
+
+      // 按照新的ES6的行为方式实现
+      function foo(...args) {
+        // args已经是一个真正的数组
+        // 丢弃args中第一个元素
+        args.shift();
+        // 把整个args作为参数传给console.log(..)
+        console.log(...args);
+      }
+      // 按照前ES6的老派行为方式实现
+      function bar() {
+        // 把arguments转换为一个真正的数组
+        var args = Array.prototype.slice.call(arguments);
+        // 在尾端添加几个元素
+        args.push(4, 5);
+        // 过滤掉奇数
+        args = args.filter(function (v) {
+          return v % 2 == 0;
+        });
+        // 把整个args作为参数传给foo(..)
+        foo.apply(null, args);
+      }
+      bar(0, 1, 2, 3);
+
+      function foo2(x = 11, y = 31) {
+        console.log(x + y);
+      }
+      foo2(); // 42
+      foo2(5, 6); // 11
+      foo2(0, 42); // 42
+      foo2(5); // 36
+      foo2(5, undefined); // 36 <-- 丢了undefined
+      foo2(5, null); // 5 <-- null被强制转换为0
+      foo2(undefined, 6); // 17 <-- 丢了undefined
+      foo2(null, 6); // 6 <-- null被强制转换为0
+
+      function bar(val) {
+        console.log("bar called!");
+        return y + val;
+      }
+      function foo3(x = y + 3, z = bar(x)) {
+        console.log(x, z);
+      }
+      var y = 5;
+      foo3(); // "bar called"
+      // 8 13
+      foo3(10); // "bar called"
+      // 10 15
+      y = 6;
+      foo3(undefined, 10);
+    </script>
+    <script>
+      // var w = 1,
+      //   z = 2;
+      // function foo4(x = w + 1, y = x + 1, z = z + 1) {
+      //   console.log(x, y, z);
+      // }
+      // foo4();
+
+      function bar() {
+        return {
+          a: "1",
+          b: "2",
+          c: "3",
+        };
+      }
+
+      var { a: bam, b: baz, c: bap } = bar();
+      // var {
+      //   a: bam,
+      //   b: baz,
+      //   c: bap,
+      // } = {
+      //   a: "1",
+      //   b: "2",
+      //   c: "3",
+      // };
+      function bar2() {
+        return {
+          x: 1,
+          y: 2,
+          z: 3,
+        };
+      }
+
+      var o = {};
+      var which = "x";
+      //
+      ({ x, y, z } = bar2());
+
+      ({ [which]: o[which], y: o.y, z: o.z } = bar2());
+
+      var a = 10,
+        b = 20;
+      [b, a] = [a, b];
+
+      var {
+        a: { x: X, x: Y },
+        a,
+      } = { a: { x: 1 } };
+      // X; // 1
+      // Y; // 1
+      // a; // { x: 1 }
+      ({
+        a: X,
+        a: Y,
+        a: [Z],
+      } = { a: [1] });
+
+      ({
+        a: X,
+        a: Y,
+        a: [Z],
+      } = { a: [1] });
+      X.push(2);
+      // Y[0] = 10;
+
+      var a = [2, 3, 4];
+      var [b, ...c] = a;
+
+      function f6({ x = 10 } = {}, { y } = { y: 10 }) {
+				// 第一个参数的默认值是 {}
+				// 第二个参数的默认值是 {y: 10}
+				// x的默认值是 10
+				// y没有默认值 就这么简单
+        console.log("f6", x, y);
+      }
+      f6();
+      f6({}, {});
+
+			f6(); // 10 10
+			f6( undefined, undefined ); // 10 10
+			f6( {}, undefined ); // 10 10
+			f6( {}, {} ); // 10 undefined
+			f6( undefined, {} ); // 10 undefined
+			f6( { x: 2 }, { y: 3 } );
+
+    </script>
+  </body>
 </html>

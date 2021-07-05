@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>数字字面量</title>
+  </head>
+  <body>
+    <script>
+      Number("42"); // 42
+      Number("0o52"); // 42
+      Number("0x2a"); // 42
+      Number("0b101010");
+
+      var a = 42;
+      a.toString(); // "42"--也可以用a.toString( 10 )
+      a.toString(8); // "52"
+      a.toString(16); // "2a"
+      a.toString(2);
+
+      var snowman = "\u2603";
+      console.log(snowman);
+
+      var gclef = "\u{1D11E}";
+      console.log(gclef);
+
+      var s1 = "abc\u0301d",
+        s2 = "ab\u0107d",
+        s3 = "ab\u{1d49e}d";
+      console.log(s1); // "abćd"
+      console.log(s2); // "abćd"
+      console.log(s3); // "ab d"
+      s1.charAt(2); // "c"
+      s2.charAt(2); // "ć"
+      s3.charAt(2); // "" <-- 不可打印
+      s3.charAt(3); // "" <-- 不可打
+
+      var 𫐀 = 42;
+      // 等价于： var = 42;
+    </script>
+  </body>
+</html>

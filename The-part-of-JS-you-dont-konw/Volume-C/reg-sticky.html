@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>正则定点标识</title>
+  </head>
+  <body>
+    <p>
+      • test(..) 使用 lastIndex 作为 str
+      中精确而且唯一的位置寻找匹配。不会向前移动去寻 找匹配——要么匹配位于
+      lastIndex 位置上，要么就没有匹配。 • 如果匹配成功， test(..) 会更新
+      lastIndex 指向紧跟匹配内容之后的那个字符。如果匹 配失败， test(..) 会把
+      lastIndex 重置回 0。
+    </p>
+    <script>
+      // var re2 = /foo/y, // <-- 注意定点标识y
+      //   str = "++foo++";
+      // re2.lastIndex; // 0
+      // re2.test(str); // false--0处没有找到"foo"
+      // re2.lastIndex; // 0
+
+      // re2.lastIndex = 2;
+      // re2.test(str); // true
+      // re2.lastIndex; // 5--更新到前次匹配之后位置
+      // re2.test(str); // false
+      // re2.lastIndex; // 0--前次匹配失败后重置
+    </script>
+    <script>
+      var re = /\d+\.\s(.*?)(?:\s|$)/y;
+      str = "1. foo 2. bar 3. baz";
+      // console.log(" str.match(re) ", str.match(re));
+      // console.log(" re.lastIndex ", re.lastIndex);
+      // console.log(" str.match(re) ", str.match(re));
+      // console.log(" re.lastIndex ", re.lastIndex);
+      // console.log(" str.match(re) ", str.match(re));
+      // console.log(" re.lastIndex ", re.lastIndex);
+      // str.match(re); // [ "1. foo ", "foo" ]
+      // re.lastIndex; // 7--正确位置!
+      // str.match(re); // [ "2. bar ", "bar" ]
+      // re.lastIndex; // 14--正确位置!
+      // str.match(re); // ["3. baz", "baz"]
+
+      var re2 = /o+./g, // <-- 注意g!
+        // var re2 = /o+./y, // <-- 注意g!
+        str2 = "foot book more";
+      // str2 = "oot book more";
+
+      console.log(" str2.match(re) ", re2.exec(str2));
+      console.log(" re2.lastIndex ", re2.lastIndex);
+      console.log(" str2.match(re) ", re2.exec(str2));
+      console.log(" re2.lastIndex ", re2.lastIndex);
+      console.log(" str2.match(re) ", re2.exec(str2));
+      console.log(" re2.lastIndex ", re2.lastIndex);
+      console.log(" str2.match(re) ", re2.exec(str2));
+      console.log(" re2.lastIndex ", re2.lastIndex);
+    </script>
+  </body>
+</html>
