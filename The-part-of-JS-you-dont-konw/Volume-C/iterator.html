@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>迭代器</title>
+  </head>
+  <body>
+    <p>
+      迭代器，每次执行next()方法后，会返回当前的状态。
+      <strong>执行完毕</strong>
+    </p>
+    <p>
+      如果迭代器返回 { done: true, value: 42 }， for..of 循环会完全丢弃值
+      42，那么这个 值就被丢失了。因为这个原因，假定你的迭代器可能会通过 for..of
+      循环或者手动的等价 for
+      形式模式消耗，那么你应该等返回所有的相关迭代值之后，再返回 done: true
+      来标明 迭代完毕
+    </p>
+    <script>
+      // 前面代码中在提取值 3 的时候，迭代器 it 不会报告 done: true。必须得再次调用 next()，
+      // 越过数组结尾的值，才能得到完成信号 done: true。
+      let arr = [1, 2, 3];
+      var it = arr[Symbol.iterator]();
+
+      var greeting = "hello world";
+      var it2 = greeting[Symbol.iterator]();
+
+      var m = new Map();
+      m.set("foo", 32);
+      m.set({ cool: true }, "hello world");
+
+      var mit1 = m[Symbol.iterator]();
+      var mit2 = m.entries();
+
+      var itt = {
+        // 使迭代器it成为iterable
+        [Symbol.iterator]() {
+          return this;
+        },
+        next() {},
+      };
+
+      console.log(
+        "itt[Symbol.iterator]() === itt",
+        itt[Symbol.iterator]() === itt
+      );
+
+      // for (var v of itt) {
+      //   console.log("v ", v);
+      // }
+
+      for (var v, res; (res = itt.next() && !res.done); ) {
+        console.log("v ", v);
+      }
+
+      var Fib = {
+        [Symbol.iterator]() {
+          var n1 = 1,
+            n2 = 1;
+
+          return {
+            [Symbol.iterator]() {
+              return this;
+            },
+
+            next() {
+              var current = n2;
+              n2 = n1;
+              n1 = n1 + current;
+              return {
+                value: current,
+                done: false,
+              };
+            },
+
+            return(v) {
+              console.log("Fibonaci sequence abandoned");
+              return { value: v, done: false };
+            },
+          };
+        },
+      };
+
+      for (var v of Fib) {
+        console.log(v);
+        if (v > 50) break;
+      }
+
+      var tasks = {
+        [Symbol.iterator]() {
+          var steps = this.actions.slice();
+          return {
+            // 使迭代器成为iterable
+            [Symbol.iterator]() {
+              return this;
+            },
+            next(...args) {
+              if (steps.length > 0) {
+                let res = steps.shift()(...args);
+                return { value: res, done: false };
+              } else {
+                return { done: true };
+              }
+            },
+            return(v) {
+              steps.length = 0;
+              return { value: v, done: true };
+            },
+          };
+        },
+        actions: [],
+      };
+
+      tasks.actions.push(
+        function step1(x) {
+          console.log("step 1:", x);
+          return x * 2;
+        },
+        function step2(x, y) {
+          console.log("step 2:", x, y);
+          return x + y * 2;
+        },
+        function step3(x, y, z) {
+          console.log("step 3:", x, y, z);
+          return x * y + z;
+        }
+      );
+
+      var it = tasks[Symbol.iterator]();
+      it.next(10); // step 1: 10
+      // { value: 20, done: false }
+      it.next(20, 50); // step 2: 20 50
+      // { value: 120, done: false }
+      it.next(20, 50, 120); // step 3: 20 50 120
+      // { value: 1120, done: false }
+      it.next(); // { done: true }
+    </script>
+    <script>
+      if (!Number.prototype[Symbol.iterator]) {
+        Object.defineProperty(Number.prototype, Symbol.iterator, {
+          writable: true,
+          configurable: true,
+          enumerable: false,
+          value: function iterator() {
+            var i,
+              inc,
+              done = false,
+              top = +this;
+            // 正向还是反向迭代？
+            inc = 1 * (top < 0 ? -1 : 1);
+            return {
+              // 使得迭代器本身成为iterable!
+              [Symbol.iterator]() {
+                return this;
+              },
+              next() {
+                if (!done) {
+                  // 初始迭代总是0
+                  if (i == null) {
+                    i = 0;
+                  }
+                  // 正向迭代
+                  else if (top >= 0) {
+                    i = Math.min(top, i + inc);
+                  }
+                  // 反向迭代
+                  else {
+                    i = Math.max(top, i + inc);
+                  }
+                  // 本次迭代后结束？
+                  if (i == top) done = true;
+                  return { value: i, done: false };
+                } else {
+                  return { done: true };
+                }
+              },
+            };
+          },
+        });
+      }
+
+      for (var i of 3) {
+        console.log(i);
+      }
+      // 0 1 2 3
+      [...-3]; // [0,-1,-2,-3
+    </script>
+  </body>
+</html>

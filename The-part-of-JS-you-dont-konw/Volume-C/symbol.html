@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Symbol</title>
+  </head>
+  <body>
+    <p>
+      <strong>对于代码来说，和其他开发者交流与 提供计算机指令同等重要。</strong>
+    </p>
+    <script>
+      // 等价于： var = 42;
+      const INSTANCE = Symbol("instance");
+      function HappyFace() {
+        if (HappyFace[INSTANCE]) return HappyFace[INSTANCE];
+        function smile() {
+          console.log("smile");
+        }
+        return (HappyFace[INSTANCE] = {
+          smile: smile,
+        });
+      }
+      var me = HappyFace(),
+        you = HappyFace();
+      me === you; // true
+
+      // 全局符号注册表
+      Symbol.for("event.login");
+      var s = Symbol.for("something cool");
+      var desc = Symbol.keyFor(s);
+      console.log(desc); // "something cool"
+      // 再次从注册中取得符号
+      var s2 = Symbol.for(desc);
+      s2 === s; // true
+
+      var o = {
+        foo: 42,
+        [Symbol("bar")]: "hello world",
+        baz: true,
+      };
+      Object.getOwnPropertyNames(o); // [ "foo","baz" ]
+      // 要取得对象的符号属性：
+      Object.getOwnPropertySymbols(o); // [ Symbol(bar) ]
+    </script>
+  </body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>生成器</title>
+  </head>
+  <body>
+    <p>
+      yield 不只是一个暂停点。它是一个表达式，在暂停生成器的时候发出一个值。
+    </p>
+    <script>
+      function* foo(x, y) {
+        console.log("hello", x);
+        yield x;
+        console.log("world", y);
+        // return 的值会返回到迭代器的value中
+        return y;
+      }
+
+      var it = foo(3, 4);
+
+      // 			yield 3; // 合法
+      // a = 2 + yield 3; // 不合法
+      // a = 2 + (yield 3);
+
+      function* foo2() {
+        yield* [1, 2, 3];
+      }
+
+      var it2 = foo2();
+
+      // yield* 等价于 如下模式
+
+      function* foo3() {
+        yield 1;
+        yield 4;
+        yield 6;
+      }
+
+      var it3 = foo3();
+
+      function* foo4(x) {
+        if (x < 3) {
+          x = yield* foo4(x + 1);
+        }
+        return x * 2;
+      }
+
+      var it4 = foo4(1);
+    </script>
+  </body>
+</html>
