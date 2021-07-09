@@ -10,6 +10,10 @@
     <p>
       yield 不只是一个暂停点。它是一个表达式，在暂停生成器的时候发出一个值。
     </p>
+    <p>
+      return(..) 除了可以手动调用，还可以在每次迭代的末尾被任何消耗迭代器的 ES6
+      构件自 动调用，比如 for..of 循环和 spread 运算符 ...。
+    </p>
     <script>
       function* foo(x, y) {
         console.log("hello", x);
@@ -49,6 +53,135 @@
       }
 
       var it4 = foo4(1);
+
+      function* foo5() {
+        yield 1;
+        yield 2;
+        yield 3;
+      }
+      var it5 = foo5();
+      it5.next(); // { value: 1, done: false }
+      it5.return(42); // { value: 42, done: true }
+      it5.next(); // { value: undefined, done: true
+
+      function* foo6() {
+        try {
+          yield 1;
+          yield 2;
+          yield 3;
+        } finally {
+          console.log("cleanup!");
+        }
+      }
+      for (var v of foo6()) {
+        console.log(v);
+      }
+      // 1 2 3
+      // cleanup!
+      var it6 = foo6();
+    </script>
+    <script>
+      {
+        function* foo() {
+          try {
+            yield 1;
+          } catch (err) {
+            console.log(err);
+          }
+          yield 2;
+          throw "Hello!";
+        }
+        var it = foo();
+        // 如果先throw 将无法捕获错误
+        // it.throw("Hi!"); // Hi!
+        // 执行next()后
+        console.log("it.next()", it.next());
+        // it.next(); // { value: 1, done: false }
+        try {
+          // throw 错误的时候 进
+          it.throw("Hi!"); // Hi!
+          // { value: 2, done: false }
+          console.log("it.next()", it.next());
+          console.log("never gets here");
+        } catch (err) {
+          console.log(err); // Hello!
+        }
+      }
+
+      {
+        function* foo() {
+          try {
+            yield 1;
+          } catch (err) {
+            console.log(err);
+          }
+          yield 2;
+          throw "foo: e2";
+        }
+        function* bar() {
+          try {
+            yield* foo();
+            console.log("never gets here");
+          } catch (err) {
+            console.log(err);
+          }
+        }
+        var it = bar();
+        try {
+          console.log("错误也可以通过 yield * 委托在两个方向上传播：");
+          console.log("it.next()", it.next());
+          // it.next(); // { value: 1, done: false }
+          it.throw("e1"); // e1
+          // { value: 2, done: false }
+          console.log("it.next()", it.next());
+          // it.next(); // foo: e2
+          // { value: undefined, done: true }
+        } catch (err) {
+          console.log("never gets here");
+        }
+        console.log("it.next()", it.next());
+        // it.next(); // { value: undefined, done: true }
+      }
+      {
+        function* fooo() {
+          var x = yield 42;
+          console.log(x);
+        }
+
+        // 自定义生成器
+        function foo() {
+          function nextState(v) {
+            switch (state) {
+              case 0:
+                state++;
+                // yield表达式
+                return 42;
+              case 1:
+                state++;
+                // yield表达式完成
+                x = v;
+                console.log(x);
+                // 隐式return
+                return undefined;
+              // 不需要处理状态2
+            }
+          }
+          var state = 0,
+            x;
+          return {
+            next: function (v) {
+              var ret = nextState(v);
+              return { value: ret, done: state == 2 };
+            },
+            // 省略return(..)和throw(..)
+          };
+        }
+        // 最后，让我们来测试一下我们的前 ES6“生成器”：
+        var it = foo();
+        it.next(); // { value: 42, done: false }
+        it.next(10); // 10
+        // { value: undefined, done: true }
+      }
     </script>
   </body>
 </html>
