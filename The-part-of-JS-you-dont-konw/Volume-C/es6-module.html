@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>ES6模块</title>
+</head>
+<body>
+	<div>
+		<ul>
+			<li>
+				<p>import 和 export 都必须出现在使用 它们的最顶层作用域。举例来说，不能把 import 或 export 放在 if 条件中; 它们必须出现在所有代码块和函数的外面。</p>
+			</li>
+			<li>
+				<p>
+					考虑:
+					 var awesome = 42;
+					 export { awesome };
+			// 之后 awesome = 100;
+			导入这个模块的时候，不管是在awesome = 100之前还是之后，一旦赋值发生，导入的绑 定就会决议到 100 而不是 42。
+			这是因为本质上，绑定是一个指向 awesome 变量本身的引用或者指针，而不是这个值的复 制。ES6 模块绑定为 JavaScript 带来的这个概念是前所未有的。
+				</p>
+			</li>
+			<li>
+				<p>要十分小心默认导出语法的这个微妙陷阱，特别是在代码逻辑需要更新导出值的时候。如 果你并不打算更新默认导出的值，那么使用export default ..就好。如果确实需要更新 这个值，就需要使用export { .. as default }。不管怎样，记得通过代码注释来解释你 的意图!</p>
+			</li>
+			<li>
+				<p>
+					export default {
+         foo() { .. },
+         bar() { .. },
+.. };
+这个模式看起来与大量开发者已经构造的前 ES6 模块紧密呼应，所以似乎是一个自然而然 的方法。但不幸的是，它有一些缺陷，同时也是官方不建议采用的。
+				</p>
+			</li>
+			<li>
+				<p>
+					双向绑定是不允许的。如果从一个模块导入了 foo，然后修改导入的 foo 变 量的值，就会抛出错误!下一小节我们会再次介绍这一点。
+				</p>
+			</li>
+			<li>
+				<p>
+					<code>
+						import { default as foo } from "foo";
+						// 简写成 等价于
+						import foo from "foo";
+					</code>
+				</p>
+			</li>
+			<li>
+				<p>
+					你可以把整个 API 导入到单个模块命名空间绑定: import * as foo from "foo";
+				</p>
+			</li>
+		</ul>
+	</div>
+	<script type="module">
+		bar2();
+		// “提升”了在模块作用域顶层的声明，使它在模块所有位置可用。
+		import IN, {bar as bar2, baz as baz2} from './module/module-A.js';
+		baz2();
+		// 默认引入等价于
+		IN();
+	</script>
+</body>
+</html>
