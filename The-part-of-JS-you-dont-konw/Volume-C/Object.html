@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Object</title>
+  </head>
+  <body>
+    <script>
+      var o1 = {
+        name: "a1",
+        foo() {
+          console.log("foo", this);
+        },
+      };
+
+      var o2 = Object.setPrototypeOf(
+        {
+          name: "a2",
+          // .. o2的定义 ..
+        },
+        o1
+      );
+
+      // 复制过程会忽略属性 d、f 和 Symbol("h");
+      // 不可枚举的属性和非自有的属性都被排除在赋 值过程之外。
+      // 另外，e 作为一个普通属性赋值被复制，而不是作为只读属性复制。
+      // ES6 增加了一个修正工具 Number.isNaN(..)，可以按照期望工作:
+      console.log("isNaN", isNaN("dare"));
+      console.log("Number.isNaN", Number.isNaN("dare"));
+
+      Number.isInteger(4); // true
+      Number.isInteger(4.0); // true
+      Number.isInteger(4.2);
+
+      "foo".repeat(3);
+
+      var str = "hello world";
+      console.log("str.startsWith('')", str.startsWith(""));
+      console.log("str.startsWith('')", str.startsWith("he"));
+      console.log("str.startsWith('')", str.startsWith("heaa"));
+
+      function Foo(greeting) {
+        this.greeting = greeting;
+      }
+      Foo.prototype[Symbol.toStringTag] = "F00oo";
+      Object.defineProperty(Foo, Symbol.hasInstance, {
+        value: function (inst) {
+          return inst.greeting == "hello";
+        },
+      });
+      var a = new Foo("hello"),
+        b = new Foo("world");
+      b[Symbol.toStringTag] = "cool";
+      a.toString();
+      String(b);
+
+      var arr = [1, 2, 3, 4, 5];
+      arr + 10; // 1,2,3,4,510
+      arr[Symbol.toPrimitive] = function (hint) {
+        console.log("hint ", arguments);
+        if (hint == "default" || hint == "number") {
+          // 求所有数字之和
+          return this.reduce(function (acc, curr) {
+            return acc + curr;
+          }, 0);
+        }
+      };
+
+      // replace 的方法
+      console.log(
+        '"abaca".replace(/a/g, [1, 2, 3]) ',
+        "abaca".replace(/a/g, [1, 2, 3])
+      );
+
+      var o = { a: 1, b: 2, c: 3 },
+        a = 10,
+        b = 20,
+        c = 30;
+      o[Symbol.unscopables] = {
+        a: false,
+        b: true,
+        c: false,
+      };
+
+      with (o) {
+        console.log(a, b, c);
+      }
+
+      // concat时是否展开
+      var a = [1, 2, 3],
+        b = [4, 5, 6];
+      b[Symbol.isConcatSpreadable] = false;
+      [].concat(a, b);
+    </script>
+  </body>
+</html>

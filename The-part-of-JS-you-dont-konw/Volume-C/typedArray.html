@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TypedArray</title>
+  </head>
+  <body>
+    <p>
+      目前 Web
+      上最常用的是小端表示方式，但是肯定存在不采用这种方式的浏览器。了解一块
+      二进制数据生产方和消费方的大小端属性是很重要的。
+    </p>
+    <script>
+      var buf = new ArrayBuffer(32);
+      console.log("buf.byteLength", buf.byteLength);
+      var arr = new Uint16Array(buf);
+      console.log("arr.length", arr.length);
+
+      var littleEndian = (function () {
+        var buffer = new ArrayBuffer(2);
+        new DataView(buffer).setInt16(0, 256, true);
+        return new Int16Array(buffer)[0] === 256;
+      })();
+
+      var buf = new ArrayBuffer(2);
+      var view8 = new Uint8Array(buf);
+      var view16 = new Uint16Array(buf);
+      view16[0] = 3085;
+      view8[0];
+      view8[1];
+      view8[0].toString(16);
+      view8[1].toString(16);
+      // 交换(就像大小端变换一样!)
+      var tmp = view8[0];
+      view8[0] = view8[1];
+      view8[1] = tmp;
+      // 13 // 12
+      // "d" // "c"
+      view16[0];
+
+      // 这可能会引起问题，比如，如果你要把 TypedArray 中的值平方。考虑:
+      var a = new Uint8Array(3);
+      a[0] = 10;
+      a[1] = 20;
+      a[2] = 30;
+      var b = a.map(function (v) {
+        return v * v;
+      });
+      b; // [100, 144, 132]
+
+      var a = new Uint8Array(3);
+      a[0] = 10;
+      a[1] = 20;
+      a[2] = 30;
+      var b = Uint16Array.from(a, function (v) {
+        return v * v;
+      });
+      b; // [100, 400, 900]
+
+      var points = [2, 4, 5, 8];
+      points.findIndex((v) => {
+        console.log("v this", this);
+        return v == 5;
+      }, points);
+
+      var arr = [];
+      arr.length = 3;
+      arr[1] = 2;
+      console.log("values", [...arr.values()]);
+      console.log("entries", [...arr.entries()]);
+
+      var x = -0;
+
+      // 判断 -0 的方法
+      console.log("判断 -0 的方法", x === 0 && 1 / x === -Infinity);
+    </script>
+  </body>
+</html>

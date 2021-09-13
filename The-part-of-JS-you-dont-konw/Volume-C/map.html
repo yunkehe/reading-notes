@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Map</title>
+  </head>
+  <body>
+    <p>
+      map 的本质是允许你把某些额外的信息(值)关联到一个对象(键)上，而无需把这个信
+      息放入对象本身。
+    </p>
+    <script>
+      // map;
+      var m = new Map();
+      var x = { id: 1 },
+        y = { id: 2 };
+      m.set(x, "foo");
+      m.set(y, "bar");
+      var keys = [...m.keys()];
+      keys[0] === x;
+      keys[1] === y;
+      // true
+      // true
+      //  要确定一个 map 中是否有给定的键，可以使用 has(..) 方法: var m = new Map();
+      var x = { id: 1 },
+        y = { id: 2 };
+      m.set(x, "foo");
+      m.has(x);
+      m.has(y);
+      // true
+      // false
+
+      var o = new Array(3);
+      console.log("o :", o);
+      var a1 = Array.of(3);
+      console.log("a1 :", a1);
+
+      var arrLike = {
+        length: 4,
+        2: "foo",
+      };
+      console.log(Array.from(arrLike));
+
+      var a = Array(4); // 4个空槽位!
+      var b = Array.apply(null, { length: 4 }); // 4个undefined值
+      // 而现在 Array.from(..) 使其简单了很多: var c = Array.from( { length: 4 } );
+      // 4个undefined值
+    </script>
+  </body>
+</html>
