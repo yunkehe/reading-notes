@@ -1,3 +1,5 @@
+// ES6 允许按照一定模式，从数组和对象中提取值，对变量进行赋值，这被称为解构（Destructuring）。
+// 函数的参数也可以解构
 // 变量的解构赋值
 var [a, b, c] = [1, 2, 3];
 console.log(a);
@@ -40,7 +42,7 @@ console.log('z: ', z);
 //     z = [1][0];
 // }
 
-// 对象的解构赋值 
+// 对象的解构赋值
 var {foo: baz} = {foo: 'aaa', bar: 'bbb'};
 console.log('baz: ', baz);
 
@@ -76,3 +78,28 @@ for(let [key, value] of map){
 
 // ### 2. 输入模块的指定方法
 // const {sourceMapConsumer, SourceNode} = require('source-map');
+
+// 箭头函数 arguments
+let arrow1 = () => {
+	console.log('arguments', arguments);
+}
+
+arrow1(3, 5)
+
+
+let arrow2 = (...x) => {
+	// 等价于下面的common 函数参数有一个隐式的 arguments
+	// 函数参数的位置传入可能是一个数组
+	console.log('arguments ', x);
+}
+
+arrow2(3, 5)
+
+function common(...y) {
+	let [...x] = arguments
+	console.log('arguments ', arguments, x);
+	console.log('arguments instanceof Array', arguments instanceof Array);
+	console.log('arguments instanceof Object', arguments instanceof Object);
+	console.log('x ', x);
+	console.log('y ', y);
+}
