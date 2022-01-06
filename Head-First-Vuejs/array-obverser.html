@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>监测数组的变化</title>
+  </head>
+  <body>
+    <script>
+      let arr = []
+      // 实现一个拦截器
+      const arrayProto = Array.prototype
+      const arrayMethods = Object.create(arrayProto)
+      // 记忆改变数组长度的方法
+      let methods = [
+        'push',
+        'pop',
+        'shift',
+        'unshift',
+        'splice',
+        'sort',
+        'reverse',
+      ]
+      methods.forEach(method => {
+        protoMethod = arrayProto[method]
+
+        Object.defineProperty(arrayMethods, method, {
+          value: function mutatur(...args) {
+            console.log('数组拦截器中的方法')
+            return protoMethod.apply(this, args)
+          },
+          enumerable: false,
+          writable: true,
+          configurable: true,
+        })
+      })
+
+      class Observer {
+        constructor(value) {
+          this.value = value
+
+          if (Array.isArray(value)) {
+            value.__proto__ = arrayMethods
+          } else {
+            this.walk(value)
+          }
+        }
+      }
+
+      arr2 = new Observer(arr)
+
+      // 测试
+      arr.push(2, 3)
+      arr2.push(2, 4)
+    </script>
+    <script src="./js/observer.js"></script>
+  </body>
+</html>
