@@ -7,47 +7,11 @@
     <title>监测数组的变化</title>
   </head>
   <body>
+    <h2>数组的变化侦测</h2>
+    <p>1. 使用拦截器覆盖原生的方法</p>
+    <script src="./js/observer.js"></script>
     <script>
       let arr = []
-      // 实现一个拦截器
-      const arrayProto = Array.prototype
-      const arrayMethods = Object.create(arrayProto)
-      // 记忆改变数组长度的方法
-      let methods = [
-        'push',
-        'pop',
-        'shift',
-        'unshift',
-        'splice',
-        'sort',
-        'reverse',
-      ]
-      methods.forEach(method => {
-        protoMethod = arrayProto[method]
-
-        Object.defineProperty(arrayMethods, method, {
-          value: function mutatur(...args) {
-            console.log('数组拦截器中的方法')
-            return protoMethod.apply(this, args)
-          },
-          enumerable: false,
-          writable: true,
-          configurable: true,
-        })
-      })
-
-      class Observer {
-        constructor(value) {
-          this.value = value
-
-          if (Array.isArray(value)) {
-            value.__proto__ = arrayMethods
-          } else {
-            this.walk(value)
-          }
-        }
-      }
-
       arr2 = new Observer(arr)
 
       // 测试

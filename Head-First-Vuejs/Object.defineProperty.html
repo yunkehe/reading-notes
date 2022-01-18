@@ -7,7 +7,21 @@
     <title>Javascript中对象变化侦查</title>
   </head>
   <body>
-    <p>在getter中收集依赖，在setter中触发依赖。</p>
+    <h1>对象的变化侦测</h1>
+    <p>什么是脏检查？</p>
+    <p>
+      数据源是状态，对应的dom节点是依赖，当数据源发生变化时，对应的dom节点相应更新。
+    </p>
+    <p>vue框架在getter中收集依赖，在setter中触发依赖。</p>
+    <a
+      href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty"
+      >Object.defineProperty【Mozilla文档】</a
+    >
+    <div>
+      对象里目前存在的属性描述符有两种主要形式：数据描述符和存取描述符。数据描述符是一个具有值的属性，该值可以是可写的，也可以是不可写的。存取描述符是由
+      getter 函数和 setter
+      函数所描述的属性。一个描述符只能是这两者其中之一；不能同时是两者。
+    </div>
     <script src="./js/observer.js"></script>
     <script>
       // 依赖类
